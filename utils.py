@@ -1,35 +1,50 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 import random
 import shutil
 import xml.etree.ElementTree as ET
 
 
-# TODO 自动检测所有标签 保存为classes文件
-def detect_classes(annotation_path):
-    pass
+def detect_classes(annotation_path, classes_path=None) -> list[str]:
+    if classes_path:
+        print(f"use {classes_path}")
+        return [c.replace("\n", "") for c in open(classes_path, "r", encoding="utf-8").readlines()]
+    classes = set()
+    for file in os.listdir(annotation_path):
+        if file.endswith("xml"):
+            tree = ET.parse(os.path.join(annotation_path, file))
+            root = tree.getroot()
+            for obj in root.iter('object'):
+                cls_name = obj.find('name').text
+                cls_name = re.sub(" ", "", cls_name)
+                classes.add(cls_name)
+    return list(classes)
 
-# TODO 文件名和id映射(file, id) 修改文件名
-def split_dataset(annotation_path, ratio):
-    # TODO 过滤掉非xml文件
-    total_xml = os.listdir(annotation_path)
+def split_dataset(annotation_path, set_names, set_ratios) -> list:
+    total_xml = [file.replace(".xml", "") for file in os.listdir(annotation_path) if file.endswith("xml")]
 
     total_num = len(total_xml)
-    sets_num = [int(r*total_num) for r in ratio]
+    sets_num = [int(r*total_num) for r in set_ratios]
+
+    for name, num in zip(set_names, sets_num):
+        if num <= 0:
+            print(f"\033[1;31m[WARNING]:\033[0m {name}数据集所含数据量为0")
 
     current_set = set(range(total_num))
     filtered_set = []
+    filtered_set_id = []
     for idx, n in enumerate(sets_num):
         if idx == len(sets_num)-1:
-            filtered_set.append(list(current_set))
+            filtered_set.append([total_xml[i] for i in list(current_set)])
+            filtered_set_id.append(list(current_set))
             break
         selected_set = random.sample(list(current_set), k=n)
         current_set -= set(selected_set)
-        filtered_set.append(selected_set)
+        filtered_set.append([total_xml[i] for i in selected_set])
+        filtered_set_id.append(selected_set)
 
-    # print([len(x) for x in filtered_set], total_num)
-
-    return filtered_set
+    return filtered_set, filtered_set_id
 
 def convert(size, box):
     dw = 1. / (size[0])
@@ -51,16 +66,19 @@ def convert(size, box):
 def get_labels(xml_file_path, all_classes):
     labels = []
 
-    tree = ET.parse(xml_file_path)
+    with open(xml_file_path, "r", encoding="utf-8") as f:
+        tree = ET.parse(f)
     root = tree.getroot()
     size = root.find('size')
     w = int(size.find('width').text)
     h = int(size.find('height').text)
+    if w==0 or h==0:
+        return False
 
     for obj in root.iter('object'):
-        difficult = obj.find('difficult').text
+        difficult = int(obj.find('difficult').text)
         cls = obj.find('name').text
-        if cls not in all_classes or int(difficult) == 1:
+        if cls not in all_classes or difficult == 1:
             continue
         cls_id = all_classes.index(cls)
 
@@ -77,7 +95,7 @@ def get_labels(xml_file_path, all_classes):
         b = (b1, b2, b3, b4)
         bb = convert((w, h), b)
 
-        labels.append(f"{str(cls_id)} {" ".join([str(a) for a in bb])}\n")
+        labels.append(f"{str(cls_id)} {' '.join([str(a) for a in bb])}\n")
 
     return labels
 

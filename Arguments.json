@@ -1,0 +1,11 @@
+{
+    "Annotation_PATH": "./Annotations",
+    "Image_PATH": "./JPEGImages",
+    "Output_PATH": "./mydataset",
+
+    "Set_names": ["train", "val", "test"],
+    "Set_ratios": [0.8, 0.1, 0.1],
+    "Classes": "auto",
+
+    "MODE": "copy"
+}
