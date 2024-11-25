@@ -29,5 +29,6 @@ for dataset, dataset_id, set_name in zip(Datasets, Dataset_ids, P.Set_names):
         # 复制/剪切图片到指定路径
         create_image(os.path.join(P.Image_PATH, f"{file}.jpg"), os.path.join(P.Output_image_path, set_name, f"{file_id}.jpg"), P.MODE)
 
+    id2path = lambda data_id: re.sub(r"\\{1,2}", "/", os.path.join("./images", set_name, f"{data_id}.jpg")+"\n")
     with open(os.path.join(P.Output_PATH, f"{set_name}.txt"), "w", encoding="utf-8") as f:
-        f.writelines([os.path.join("./images", set_name, f"{d}.jpg")+"\n" for d in used_data])
+        f.writelines([id2path(d) for d in used_data])
