@@ -6,13 +6,28 @@ VOC数据集格式转换为[mindyolo](https://github.com/mindspore-lab/mindyolo)
 
 ## 使用方法
 
-修改`Arguments.json`中的各项参数，然后在终端`python main.py`即可
+### 在终端中：
+
+修改`Arguments.json`中的各项参数，然后在终端`python main.py --config ./Arguments.json`即可
 
 根据生成的`classes.txt`修改自己的yaml配置文件，然后通过`python train.py --config your_config.yaml`开始训练
 
 - yaml配置文件参考[mindyolo configs](https://github.com/mindspore-lab/mindyolo/tree/master/configs)
 - [train.py](https://github.com/mindspore-lab/mindyolo/blob/master/train.py)在mindyolo代码库下载
 - checkpoint在[mindyolo 模型仓库](https://github.com/mindspore-lab/mindyolo/blob/master/docs/zh/modelzoo/benchmark.md)
+
+### 通过代码调用：
+
+```python
+from VOC2Mindyolo import voc2yolo
+
+# 可选参数见下一节参数说明
+voc2yolo(
+    Annotation_PATH="./VOC2Mindyolo/Annotations",
+    Image_PATH="./VOC2Mindyolo/JPEGImages",
+    Output_PATH="./VOC2Mindyolo/mydataset"
+)
+```
 
 ## 参数说明
 

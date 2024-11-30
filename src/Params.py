@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-import json
 from typing import Union, List
 from dataclasses import dataclass, field
-from utils import detect_classes
+from .utils import detect_classes
 
 
 @dataclass
@@ -57,7 +56,3 @@ class Param:
 
         if self.MODE not in ["copy", "cut"]:
             raise ValueError("MODE必须为 copy 或 cut")
-
-
-kwargs = json.load(open("./Arguments.json", encoding="utf-8"))
-P = Param(**kwargs)
