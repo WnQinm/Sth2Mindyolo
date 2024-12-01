@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import argparse
-from src.voc2yolo import voc2yolo
+from voc.voc2yolo import voc2yolo
 
 
 if __name__ == "__main__":

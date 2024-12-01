@@ -1,1 +1,1 @@
-from .src.voc2yolo import voc2yolo
+from .voc import voc2yolo

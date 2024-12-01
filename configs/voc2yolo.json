@@ -1,7 +1,7 @@
 {
-    "Annotation_PATH": "./Annotations",
-    "Image_PATH": "./JPEGImages",
-    "Output_PATH": "./mydataset",
+    "Annotation_PATH": "./voc/Annotations",
+    "Image_PATH": "./voc/JPEGImages",
+    "Output_PATH": "./voc/mydataset",
 
     "Set_names": ["train", "val", "test"],
     "Set_ratios": [0.8, 0.1, 0.1],
