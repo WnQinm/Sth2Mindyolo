@@ -1,0 +1,6 @@
+{
+    "Dataset_PATH": "./coco/cocodataset",
+    "Output_PATH": "./coco/yolodataset",
+    "Set_names": ["train", "test"],
+    "MODE": "copy"
+}

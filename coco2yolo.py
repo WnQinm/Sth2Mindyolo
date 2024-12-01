@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import argparse
-from voc import voc2yolo
+from coco import coco2yolo
 
 
 if __name__ == "__main__":
@@ -10,4 +10,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     kwargs = json.load(open(args.config, encoding="utf-8"))
-    voc2yolo(**kwargs)
+    coco2yolo(**kwargs)
