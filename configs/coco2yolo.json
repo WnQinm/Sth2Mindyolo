@@ -1,6 +1,6 @@
 {
-    "Dataset_PATH": "./coco/cocodataset",
-    "Output_PATH": "./coco/yolodataset",
+    "Dataset_PATH": "./coco/OriginDataset",
+    "Output_PATH": "./coco/OutputDataset",
     "Set_names": ["train", "test"],
     "MODE": "copy"
 }
